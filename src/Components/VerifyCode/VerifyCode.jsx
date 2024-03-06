@@ -12,33 +12,35 @@ import { Helmet } from 'react-helmet'
   const navigate = useNavigate();
   const [backendError, setBackendError] = useState(null);
 
-  async function verifycode(values ) {
+  async function verifycode(values) {
     try {
       const { data } = await axios.post('https://yomnaelshorbagy.onrender.com/verifyCode', values);
-
+  
       if (data && data.message === 'Code verification successful') {
-        navigate('/home');
-
-      } else if (data.message === 'Invalid code or email') {
-        setBackendError(data.message);
+        navigate('/resetpass');
+      } else {
+        setBackendError('Invalid code or email'); // Set a generic error message for unexpected responses
       }
-
+  
     } catch (error) {
       handleLoginError(error);
     }
   }
-
+  
   const handleLoginError = (error) => {
-    console.error('Error in VerifiedCode function:', error);
+    console.error('Error in VerifyCode function:', error);
     if (error.response) {
-      setBackendError(error.response.data.data.message);
+      if (error.response.status === 404) {
+        setBackendError('Invalid code or email');
+      } else {
+        setBackendError(error.response.data.data.message || 'An error occurred. Please try again.');
+      }
     } else if (error.request) {
       setBackendError('No response received from the server. Please try again.');
     } else {
       setBackendError('An error occurred. Please try again.');
     }
   };
-
   const validationSchema = Yup.object({
     email: Yup.string().email('Invalid Email').required('Email is required'),
   });

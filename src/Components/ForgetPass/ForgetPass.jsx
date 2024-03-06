@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -15,29 +14,35 @@ import { Helmet } from 'react-helmet'
   async function forgetpass(values) {
     try {
       const { data } = await axios.post('https://yomnaelshorbagy.onrender.com/forgetPassword', values);
-
+      console.log(data);
+      console.log(data.message);
       if (data && data.message === 'Please check your email for the verification code') {
+        console.log(data);
+        console.log(data.message);
         navigate('/verifycode');
-
-      } else if (data.message === 'User not found') {
-        setBackendError(data.message);
+      } else {
+        setBackendError('An error occurred. Please try again.'); 
       }
     } catch (error) {
       handleLoginError(error);
     }
   }
-
+  
   const handleLoginError = (error) => {
     console.error('Error in Forget password function:', error);
     if (error.response) {
-      setBackendError(error.response.data.data.message);
+      if (error.response.status === 404) {
+        setBackendError('User not found.');
+      } else {
+        setBackendError(error.response.data.data.message || 'An error occurred. Please try again.');
+      }
     } else if (error.request) {
-      setBackendError('No response received from the server. Please try again.' );
+      setBackendError('No response received from the server. Please try again.');
     } else {
       setBackendError('An error occurred. Please try again.');
     }
   };
-
+  
 
   const validationSchema = Yup.object({
     email: Yup.string().email('Invalid Email').required('Email is required'),
@@ -77,7 +82,7 @@ import { Helmet } from 'react-helmet'
             <Alert variant="danger">{ForgetForm.errors.email}</Alert>
           ) : null}
         </Form.Group>
-        <Form.Group className="mb-1">
+        {/* <Form.Group className="mb-1"> */}
 
         <Button type="submit" variant="info" className="w-100 rounded-pill">
           Forget Password
@@ -86,12 +91,13 @@ import { Helmet } from 'react-helmet'
         <div className="text-center mt-3">
           <Link to="/verifycode" className="text-info">Verify Code</Link>
         </div>
-        </Form.Group>
+        {/* </Form.Group> */}
 
       </Form>
     </div>
     </>
   );
 }
+
 
 

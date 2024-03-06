@@ -114,34 +114,40 @@ export default function ResetPassword() {
     const [backendError, setBackendError] = useState(null);
 
     async function reset(values) {
-        try {
-            const { data } = await axios.post('https://yomnaelshorbagy.onrender.com/resetPassword', values);
-            console.log('data', data);
-
-            if (data.status === 'success') {
-                navigate('/loginUser');
-            } else if (data.status === 'fail') {
-                setBackendError(data.data.message);
-            }
-        } catch (error) {
-            handleLoginError(error);
-        }
-    }
-
+      try {
+          const { data } = await axios.post('https://yomnaelshorbagy.onrender.com/resetPassword', values);
+          console.log('data', data);
+  
+          if (data.message === 'reset success') {
+              navigate('/login');
+          } else {
+              setBackendError(data.message || 'An error occurred. Please try again.');
+          }
+      } catch (error) {
+          if (error.response && error.response.status === 404) {
+              setBackendError('User not found. Please check your email and try again.');
+          } else {
+              handleLoginError(error);
+          }
+      }
+  }
+  
     const handleLoginError = (error) => {
-        console.error('Error in login function:', error);
-        if (error.response) {
-            setBackendError(error.response.data.data.message);
-        } else if (error.request) {
-            setBackendError('No response received from the server. Please try again.');
-        } else {
-            setBackendError('An error occurred. Please try again.' );
-        }
-    };
+      console.error('Error in login function:', error);
+      if (error.response && error.response.data && error.response.data.data && error.response.data.data.message) {
+          setBackendError(error.response.data.data.message);
+          console.log(error)
 
+      } else if (error.request) {
+          setBackendError('No response received from the server. Please try again.');
+      } else {
+          setBackendError('An error occurred. Please try again.' );
+      }
+  };
+  
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid Email').required('Email is required'),
-        password: Yup.string().matches(/^[A-Z][a-z0-9]{3,8}$/, 'Password must be strong').required('Password is required'),
+        password: Yup.string().matches(/^[A-Z][a-z0-9]{5,8}$/, 'Password must be strong').required('Password is required'),
     });
 
     const resetForm = useFormik({
