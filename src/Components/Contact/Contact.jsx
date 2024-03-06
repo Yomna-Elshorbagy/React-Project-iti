@@ -1,9 +1,14 @@
 import React from "react";
 import { Navbar } from "react-bootstrap";
+import { Helmet } from "react-helmet";
 
 export default function Contact() {
   return (
     <>
+       <Helmet>
+        <title>Contact us page</title>
+        <meta name="description" content="Your page description" />
+      </Helmet>
       <Navbar />
       <div className="container my-3 py-3">
         <h1 className="text-center">Contact Us</h1>

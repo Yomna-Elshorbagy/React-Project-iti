@@ -15,7 +15,7 @@ export default function Register() {
     try {
       console.log('Register function called');
 
-      const { data } = await axios.post('http://localhost:5000/users/signup', values);
+      const { data } = await axios.post('https://yomnaelshorbagy.onrender.com/users/signup', values);
 
       if (data && data.message === 'added') {
         navigate('/login');

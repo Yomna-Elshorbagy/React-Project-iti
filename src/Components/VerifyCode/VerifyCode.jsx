@@ -14,7 +14,7 @@ import { Helmet } from 'react-helmet'
 
   async function verifycode(values ) {
     try {
-      const { data } = await axios.post('http://localhost:5000/verifyCode', values);
+      const { data } = await axios.post('https://yomnaelshorbagy.onrender.com/verifyCode', values);
 
       if (data && data.message === 'Code verification successful') {
         navigate('/home');

@@ -14,7 +14,7 @@ import { Helmet } from 'react-helmet'
 
   async function forgetpass(values) {
     try {
-      const { data } = await axios.post('http://localhost:5000/forgetPassword', values);
+      const { data } = await axios.post('https://yomnaelshorbagy.onrender.com/forgetPassword', values);
 
       if (data && data.message === 'Please check your email for the verification code') {
         navigate('/verifycode');

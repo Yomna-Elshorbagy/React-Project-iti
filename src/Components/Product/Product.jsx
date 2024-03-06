@@ -20,10 +20,10 @@ export default function Product() {
   async function getData() {
     try {
           dispatch(changeLoader(false))
-      const productsResponse = await axios.get("http://localhost:5000/products");
+      const productsResponse = await axios.get("https://yomnaelshorbagy.onrender.com/products");
       setProducts(productsResponse.data.products);
       
-      const categoriesResponse = await axios.get("http://localhost:5000/category");
+      const categoriesResponse = await axios.get("https://yomnaelshorbagy.onrender.com/category");
       setCategories(categoriesResponse.data.categories);
     } catch (error) {
       console.error("Error fetching data:", error);

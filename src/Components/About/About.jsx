@@ -1,8 +1,14 @@
 import React from 'react'
 import { Navbar } from 'react-bootstrap'
+import { Helmet } from 'react-helmet';
+
  export default function About() {
   return (
     <>
+       <Helmet>
+        <title>About us page</title>
+        <meta name="description" content="Your page description" />
+      </Helmet>
       <Navbar />
       <div className="container my-3 py-3">
         <h1 className="text-center">About Us</h1>

@@ -115,7 +115,7 @@ export default function ResetPassword() {
 
     async function reset(values) {
         try {
-            const { data } = await axios.post('http://localhost:5000/resetPassword', values);
+            const { data } = await axios.post('https://yomnaelshorbagy.onrender.com/resetPassword', values);
             console.log('data', data);
 
             if (data.status === 'success') {

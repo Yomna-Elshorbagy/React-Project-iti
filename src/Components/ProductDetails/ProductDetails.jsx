@@ -13,7 +13,7 @@ export default function ProductDetail() {
         const fetchProductDetails = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch(`http://localhost:5000/products/${productId}`);
+                const response = await fetch(`https://yomnaelshorbagy.onrender.com/products/${productId}`);
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(`Server responded with ${response.status}: ${errorData.message}`);
@@ -41,7 +41,7 @@ export default function ProductDetail() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/usercart",
+        "https://yomnaelshorbagy.onrender.com/usercart",
         {
           method: "POST",
           headers: {

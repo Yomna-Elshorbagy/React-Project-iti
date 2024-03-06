@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from "react-bootstrap";
 import LoaderComponent from "../Loader/loader";
+import { Helmet } from "react-helmet";
 
 
 export default function CartPage() {
@@ -11,7 +12,7 @@ export default function CartPage() {
     const fetchCartData = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch("http://localhost:5000/usercart", {
+            const response = await fetch("https://yomnaelshorbagy.onrender.com/usercart", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
@@ -37,7 +38,7 @@ export default function CartPage() {
 
     const updateCart = async (productId, count, cartId) => {
         try {
-            const response = await fetch(`http://localhost:5000/${cartId}/${productId}`, {
+            const response = await fetch(`https://yomnaelshorbagy.onrender.com/${cartId}/${productId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -66,7 +67,12 @@ export default function CartPage() {
     if (error) return <div>Error: {error}</div>;
     if (!cart || cart.length === 0) return <div>Your cart is empty</div>;
 
-    return (
+    return (<>
+       <Helmet>
+        <title>cart page</title>
+        <meta name="description" content="Your page description" />
+      </Helmet>
+
         <div className="cart-page">
             <div className="container">
                 <h1>Your Cart</h1>
@@ -98,5 +104,6 @@ export default function CartPage() {
                 <Button variant="primary" className="btn btn-primary">Proceed to Checkout</Button>
             </div>
         </div>
+        </>
     );
 }
