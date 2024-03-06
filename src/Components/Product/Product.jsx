@@ -1,10 +1,9 @@
+
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
-import { Container, Row, Col, Card, Carousel, Dropdown, Button } from 'react-bootstrap';
-// import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { Container, Row, Col, Card, Carousel, Dropdown, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { changeLoader } from '../../Store/action/loaderAction';
 import LoaderComponent from '../Loader/loader';
@@ -13,16 +12,16 @@ export default function Product() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const loader = useSelector((state) => state.loader.loader);
   const dispatch = useDispatch();
 
-
   async function getData() {
     try {
-          dispatch(changeLoader(false))
+      dispatch(changeLoader(false));
       const productsResponse = await axios.get("https://yomnaelshorbagy.onrender.com/products");
       setProducts(productsResponse.data.products);
-      
+
       const categoriesResponse = await axios.get("https://yomnaelshorbagy.onrender.com/category");
       setCategories(categoriesResponse.data.categories);
     } catch (error) {
@@ -38,24 +37,12 @@ export default function Product() {
     setSelectedCategory(categoryId);
   };
 
-  // const handleAddToCart = async (productId) => {
-  //   try {
-  //     const updatedProducts = products.map(product => {
-  //       if (product._id === productId && product.stock > 0) {
-  //         return { ...product, stock: product.stock - 1 };
-  //       }
-  //       return product;
-  //     });
-  
-  //     setProducts(updatedProducts);
-  
-  //     const productToUpdate = products.find(p => p._id === productId);
-  
-  //     await axios.put(`http://localhost:5000/products/${productId}`, { stock: productToUpdate.stock });
-  //   } catch (error) {
-  //     console.error("Error updating stock:", error);
-  //   }
-  // };
+  const handleCheckboxChange = (categoryId) => {
+    const updatedSelectedCategories = selectedCategories.includes(categoryId)
+      ? selectedCategories.filter((cat) => cat !== categoryId)
+      : [...selectedCategories, categoryId];
+    setSelectedCategories(updatedSelectedCategories);
+  };
 
   return (
     <>
@@ -75,8 +62,8 @@ export default function Product() {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {categories.map((category, index) => (
-                  <Dropdown.Item 
-                    key={index} 
+                  <Dropdown.Item
+                    key={index}
                     onClick={() => handleCategorySelect(category._id)}
                   >
                     {category.categoryName}
@@ -84,6 +71,17 @@ export default function Product() {
                 ))}
               </Dropdown.Menu>
             </Dropdown>
+            <Form className="mt-3">
+              {categories.map((category, index) => (
+                <Form.Check
+                  key={index}
+                  type="checkbox"
+                  id={`checkbox-${category._id}`}
+                  label={category.categoryName}
+                  onChange={() => handleCheckboxChange(category._id)}
+                />
+              ))}
+            </Form>
             <Carousel className="mt-3">
               {categories.map((category, index) => (
                 <Carousel.Item key={index}>
@@ -91,6 +89,7 @@ export default function Product() {
                     className="d-block w-100"
                     src={category.image}
                     alt={category.categoryName}
+                    style={{ height: '300px', objectFit: 'cover' }} // Set fixed height and cover
                   />
                   <Carousel.Caption>
                     <h3>{category.categoryName}</h3>
@@ -100,47 +99,47 @@ export default function Product() {
               ))}
             </Carousel>
           </Col>
-         
 
-
-
-              { !loader ? (<LoaderComponent/>): (<>
-
-
-          <Col md={9}>
-            <Row>
-              {products
-                .filter(product => !selectedCategory || product.category === selectedCategory)
-                .map((product, index) => (
-                  <Col key={index} md={4} className="mb-4">
-                    <Card className="product-card">
-                      
-                      <Card.Img variant="top" src={product.productImage} alt="Product" className="product-image" />
-                      <Card.Body>
-                        <Card.Title>{product.productName}</Card.Title>
-                        <Card.Text>Price: {product.ProductPrice}</Card.Text>
-                        <Card.Text>In Stock: {product.stock}</Card.Text>
-                        <Link to={`/products/${product._id}`} className="btn btn-primary">View Details</Link>
-                        {/* <Button 
-                          variant="primary" 
-                          disabled={product.stock === 0}
-                          onClick={() => handleAddToCart(product._id)}
-                          className=' float-end'
-                        >
-                          <i class="fa-solid fa-cart-shopping"></i>
-                        </Button> */}
-                      </Card.Body>
-                    </Card>
-                  </Col>
-              ))} 
-            </Row>
-          </Col>
-
-</>)}
-
+          {!loader ? (
+            <LoaderComponent />
+          ) : (
+            <Col md={9}>
+              <Row>
+                {products
+                  .filter(
+                    (product) =>
+                      (!selectedCategory || product.category === selectedCategory) &&
+                      (selectedCategories.length === 0 ||
+                        selectedCategories.includes(product.category))
+                  )
+                  .map((product, index) => (
+                    <Col key={index} md={4} className="mb-4">
+                      <Card className="product-card">
+                        <Card.Img
+                          variant="top"
+                          src={product.productImage}
+                          alt="Product"
+                          className="product-image"
+                        />
+                        <Card.Body>
+                          <Card.Title>{product.productName}</Card.Title>
+                          <Card.Text>Price: {product.ProductPrice}</Card.Text>
+                          <Card.Text>In Stock: {product.stock}</Card.Text>
+                          <Link
+                            to={`/products/${product._id}`}
+                            className="btn btn-primary"
+                          >
+                            View Details
+                          </Link>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  ))}
+              </Row>
+            </Col>
+          )}
         </Row>
       </Container>
-
     </>
   );
 }
