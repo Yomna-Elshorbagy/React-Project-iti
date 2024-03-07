@@ -17,6 +17,7 @@ import ProductDetails from'./Components/ProductDetails/ProductDetails'
 import { useSelector } from 'react-redux'
 import LoaderComponent from './Components/Loader/loader'
 import Cart from './Components/Cart/Cart'
+import Profile from './Components/Userprofile/Profile'
 
 export default function App() {
 
@@ -32,6 +33,7 @@ export default function App() {
       {path:"register", element:<Register/>},
       {path:"forgetpass", element:<ForgetPass/>},
       {path:"verifycode", element:<VerifyCode/>},
+      {path:"profile", element:<Profile/>},
       {path:"resetpass", element:<ResetPassword/>},
       {path:"checkout", element:<ProtectedRoutes><Checkout/></ProtectedRoutes>},      
       {path:"cart", element:<ProtectedRoutes><Cart/></ProtectedRoutes>},      

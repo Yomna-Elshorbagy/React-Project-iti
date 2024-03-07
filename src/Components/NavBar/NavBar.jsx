@@ -56,6 +56,9 @@ export default function Navigationbar() {
                 <Nav.Link as={Link} to="about" className="mx-lg-4">
                   About
                 </Nav.Link>
+                <Nav.Link as={Link} to="profile" className="mx-lg-4 btn btn-info">
+                <i class="fa-solid fa-user"></i>
+                </Nav.Link>
                 <Nav.Link as={Link} to="cart" className="mx-lg-4 btn btn-info">
                   <i className="fa-solid fa-cart-shopping"></i>
                 </Nav.Link>
