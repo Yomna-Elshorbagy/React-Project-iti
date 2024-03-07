@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Table, Button } from "react-bootstrap";
 import LoaderComponent from "../Loader/loader";
 import { Helmet } from "react-helmet";
+import {useNavigate} from "react-router-dom";
 
 
 export default function CartPage() {
     const [cart, setCart] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     const fetchCartData = async () => {
         setIsLoading(true);
@@ -63,6 +65,9 @@ export default function CartPage() {
         updateCart(item.product._id, updatedCount, item._id);
     };
 
+    const handleProceedToCheckout = () => {
+        navigate('/checkout');
+    };
     if (isLoading) return <div><LoaderComponent /></div>;
     if (error) return <div>Error: {error}</div>;
     if (!cart || cart.length === 0) return <div>Your cart is empty</div>;
@@ -101,7 +106,7 @@ export default function CartPage() {
                         ))}
                     </tbody>
                 </Table>
-                <Button variant="primary" className="btn btn-primary">Proceed to Checkout</Button>
+                <Button variant="primary" className="btn btn-primary" onClick={handleProceedToCheckout}>Proceed to Checkout</Button>
             </div>
         </div>
         </>

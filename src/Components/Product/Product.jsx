@@ -24,6 +24,7 @@ export default function Product() {
 
       const categoriesResponse = await axios.get("https://yomnaelshorbagy.onrender.com/category");
       setCategories(categoriesResponse.data.categories);
+      dispatch(changeLoader(true)); 
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -89,7 +90,7 @@ export default function Product() {
                     className="d-block w-100"
                     src={category.image}
                     alt={category.categoryName}
-                    style={{ height: '300px', objectFit: 'cover' }} // Set fixed height and cover
+                    style={{ height: '300px', objectFit: 'cover' }} 
                   />
                   <Carousel.Caption>
                     <h3>{category.categoryName}</h3>
@@ -137,7 +138,7 @@ export default function Product() {
                   ))}
               </Row>
             </Col>
-          )}
+          )}   
         </Row>
       </Container>
     </>

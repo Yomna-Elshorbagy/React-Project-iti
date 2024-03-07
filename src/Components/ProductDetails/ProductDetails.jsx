@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate} from "react-router-dom";
 import LoaderComponent from "../Loader/loader";
 import { Helmet } from "react-helmet";
 
@@ -9,6 +9,8 @@ export default function ProductDetail() {
     const [product, setProduct] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
     useEffect(() => {
         const fetchProductDetails = async () => {
             setIsLoading(true);
@@ -68,6 +70,7 @@ export default function ProductDetail() {
       const data = await response.json();
       console.log("Server Response:", data);
       alert("Item added to cart successfully");
+      navigate("/cart");
     } catch (error) {
       console.error("Error adding item to cart:", error);
       alert(error.message);
