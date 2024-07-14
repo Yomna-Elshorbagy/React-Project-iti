@@ -5,8 +5,6 @@ Render Link: https://yomnaelshorbagy.onrender.com
 
 Take as Refrence:
 
-mail to login with: yomnaelshorbagy@gmail.com
-Password: Yomn123
 
 
 # Getting Started with Create React App
